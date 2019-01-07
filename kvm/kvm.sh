@@ -11,7 +11,7 @@
 
 
 DISKPATH="/home/willon/KVM/disk"
-ISOPATH="/home/willon/KVM/iso/CentosAuto2.iso"
+ISOPATH="/home/willon/KVM/iso/centos.iso"
 
 ###_____KVM管理相关______###
 
@@ -72,7 +72,7 @@ function  createDisk(){
 #安装系统
 function installKvm(){
     echo "INSTALLING  $1"
-	virt-install  --virt-type  kvm --name $1  --ram 1024 --cdrom=$ISOPATH  --disk=$DISKPATH/$1.qcow2
+	virt-install  --virt-type  kvm --name $1  --ram 1024 --cdrom=$ISOPATH  --disk=$DISKPATH/$1.qcow2 --network network=default,model=virtio
 }
 
 
@@ -101,6 +101,3 @@ elif [ "delete" = $1 ];then
 else
     echo "命令不合法"
 fi
-
-
-

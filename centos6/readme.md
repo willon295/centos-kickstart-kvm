@@ -89,7 +89,7 @@ default vesamenu.c32
 timeout 50                               ##等待时间
 display boot.msg
 menu background splash.jpg
-menu title Welcome to use CentOS 6.4!
+menu title Hello Centos
 menu color border 0 #ffffffff #00000000
 menu color sel 7 #ffffffff #ff000000
 menu color title 0 #ffffffff #00000000
@@ -128,7 +128,11 @@ createrepo -g repodata/*.xml ./
 ```
 5. 生成新的ISO文件
 ```bash
-mkisofs -o CentOS-6.10-KS.iso -b /data/ISO/isolinux/isolinux.bin -c /data/ISO/isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -J -v -T /root
+mkisofs -o CentOS-6.10-KS.iso -b /data/ISO/isolinux/isolinux.bin -c /data/ISO/isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -J -v -T ../ISO
+```
+或者是下面这样制作也行
+```bash
+genisoimage -v -cache-inodes -joliet-long -R -J -T -V asika -o /root/centos.iso  -c  isolinux/boot.cat   -b isolinux/isolinux.bin  -no-emul-boot  -boot-load-size 4 -boot-info-table  -eltorito-alt-boot -b  images/efiboot.img  -no-emul-boot .
 ```
 
 新生成的 ISO 文件存放在 /root 目录

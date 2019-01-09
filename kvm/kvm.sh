@@ -32,12 +32,40 @@ function startKvm(){
     fi
 }
 
+
+#启动所有关闭的kvm
+function startAllKvm(){
+
+	NOT_RUN_KVM=`virsh  list --all | grep  " - " | awk '{print $2}'`
+	if [ -z "$NOT_RUN_KVM"  ]; then
+			exit 0
+	fi
+	for i in $NOT_RUN_KVM
+	do
+        virsh  start $i
+	done		
+		
+}
+
 #重启KVM
 function restartKvm(){
     checkKvm $1
     if [ $? -eq 0 ]; then
         virsh  restart $1
     fi
+}
+
+#关闭所有
+
+function stopAllKvm(){
+    RUN_KVM=` virsh   list  --all  | grep  "running" | awk '{print $2}'`
+	if [ -z "$RUN_KVM" ];then
+			exit 0
+	fi
+	for i in $RUN_KVM
+	do
+	    virsh shutdown $i
+    done
 }
 
 #删除KVM
@@ -72,7 +100,7 @@ function  createDisk(){
 #安装系统
 function installKvm(){
     echo "INSTALLING  $1"
-	virt-install  --virt-type  kvm --name $1  --ram 1024 --cdrom=$ISOPATH  --disk=$DISKPATH/$1.qcow2 --network network=default,model=virtio
+	virt-install   --name $1  --ram 1024  --vcpus=1   --cdrom=$ISOPATH  --disk=$DISKPATH/$1.qcow2 --network network=default,model=virtio --os-type linux --os-variant rhel7.6
 }
 
 
@@ -98,6 +126,13 @@ elif [ "ip" = $1 ];then
     getKvmIp $2
 elif [ "delete" = $1 ];then
     destoryKvm $2
+elif [ "start-all" = $1 ];then
+	startAllKvm
+elif [ "stop-all" = $1 ];then
+	stopAllKvm
 else
     echo "命令不合法"
 fi
+
+
+

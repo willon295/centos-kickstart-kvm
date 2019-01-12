@@ -1,17 +1,17 @@
 #/bin/bash
 
 #=================================================#
-#    kvm.sh  install 名称 ==> 创建新的KVM
-#    kvm.sh  delete  名称 ==> 删除指定KVM
-#    kvm.sh  ip      名称 ==> 查看对应的IP
-#    kvm.sh  start   名称 ==> 启动KVM
-#    kvm.sh  check   名称 ==> 检查KVM
-#    kvm.sh  restart 名称 ==> 重启KVM
+#    kvm  install 名称 ==> 创建新的KVM
+#    kvm  delete  名称 ==> 删除指定KVM
+#    kvm  ip      名称 ==> 查看对应的IP
+#    kvm  start   名称 ==> 启动KVM
+#    kvm  check   名称 ==> 检查KVM
+#    kvm  restart 名称 ==> 重启KVM
 #=================================================#
 
 
-DISKPATH="/home/willon/KVM/disk"
-ISOPATH="/home/willon/KVM/iso/centos.iso"
+DISKPATH="/opt/kvm/disk"
+ISOPATH="/opt/kvm/iso/centos.iso"
 
 ###_____KVM管理相关______###
 
@@ -88,8 +88,16 @@ function getKvmIp(){
 
 ###____KVM安装相关______###
 
+#检查目录是否存在
+function checkAndmkDir(){
+    if [ ! -d $DISKPATH ]; then
+        mkdir -p $DISKPATH
+    fi
+}
+
 #创建虚拟硬盘
 function  createDisk(){
+   checkAndmkDir
 	qemu-img  create  -f qcow2 $DISKPATH/$1.qcow2 10G
 	if [ -f $DISKPATH/$1.qcow2 ];then
 		echo "Create Disk  $1.qcow2 SUCCESS !"

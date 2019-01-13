@@ -50,9 +50,7 @@ function startAllKvm(){
 #重启KVM
 function restartKvm(){
     checkKvm $1
-    if [ $? -eq 0 ]; then
-        virsh  restart $1
-    fi
+    virsh  reboot $1
 }
 
 #关闭所有
